@@ -18,8 +18,7 @@ def get_system_info():
     }
     print("System Info:", *[f"  {k}: {v}" for k, v in info.items()], sep="\n")
 
-def generate_test_data(filename, file_size):
-    size_bytes = file_size * 1024 * 1024
+def generate_test_data(filename, size_bytes):
     try:
         pattern = bytes([i % 256 for i in range(size_bytes)])
         with open(filename, 'wb') as f:
@@ -74,8 +73,8 @@ def parse_size_input():
 def main():
     print("="*40, "COMPRESSION BENCHMARK", "="*40)
     get_system_info()
-    file_size, test_file = parse_size_input(), "test_data.bin"
-    if generate_test_data(test_file, file_size):
+    size_bytes, test_file = parse_size_input(), "test_data.bin"
+    if generate_test_data(test_file, size_bytes):
         cpu_ok, cpu_ratio, cpu_time = cpu_compression(test_file)
         print(f"CPU (pyzstd): {'OK' if cpu_ok else 'FAILED'}  Ratio: {cpu_ratio:.2f}x  Time: {cpu_time:.4f}s")
         gpu_ok, gpu_ratio, gpu_time = gpu_compression(test_file)
